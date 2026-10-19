@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>EduAnalytics | Student Performance Dashboard</title>
+
+    <meta
+        name="description"
+        content="Student performance analysis dashboard for grading, filtering, visualizing and exporting academic results."
+    >
+
+    <link rel="stylesheet" href="CSS/style.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-header">
+            <h2>EduAnalytics</h2>
+            <p>Student Performance Analysis</p>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#dashboard" class="nav-link active">Dashboard</a>
+            <a href="#students" class="nav-link">Students</a>
+            <a href="#performance" class="nav-link">Performance</a>
+            <a href="#reports" class="nav-link">Reports</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <p>Better Data. Brighter Students.</p>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOP HEADER -->
+        <header class="top-header">
+
+            <div>
+                <h1>Student Performance Dashboard</h1>
+                <p>
+                    Analyze, grade and visualize student academic performance.
+                </p>
+            </div>
+
+            <div class="header-actions">
+                <button
+                    type="button"
+                    id="exportReportBtn"
+                    class="btn btn-primary"
+                >
+                    Export Report
+                </button>
+            </div>
+
+        </header>
+
+
+        <!-- DATA IMPORT -->
+        <section class="data-import-section" id="dashboard">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Import Student Data</h2>
+                    <p>Upload your student results from a CSV or Excel file.</p>
+                </div>
+            </div>
+
+            <div class="upload-container">
+
+                <div class="upload-box">
+
+                    <div class="upload-icon">📁</div>
+
+                    <h3>Upload Student Results</h3>
+
+                    <p>Supported formats: CSV and XLSX</p>
+
+                    <label for="fileInput" class="upload-button">
+                        Choose File
+                    </label>
+
+                    <input
+                        type="file"
+                        id="fileInput"
+                        accept=".csv,.xlsx"
+                        hidden
+                    >
+
+                    <p id="fileName" class="file-name">
+                        No file selected
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SUMMARY CARDS -->
+        <section class="summary-section">
+
+            <div class="summary-card">
+                <div class="summary-card-content">
+                    <p>Total Students</p>
+                    <h3 id="totalStudents">0</h3>
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <div class="summary-card-content">
+                    <p>Average Score</p>
+                    <h3 id="averageScore">0%</h3>
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <div class="summary-card-content">
+                    <p>Pass Rate</p>
+                    <h3 id="passRate">0%</h3>
+                </div>
+            </div>
+
+            <div class="summary-card">
+                <div class="summary-card-content">
+                    <p>Top Student</p>
+                    <h3 id="topStudent">---</h3>
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- FILTERS -->
+        <section class="filters-section" id="students">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Student Records</h2>
+                    <p>Search and filter student performance records.</p>
+                </div>
+            </div>
+
+            <div class="filters-container">
+
+                <div class="filter-group">
+                    <label for="studentSearch">Search Student</label>
+
+                    <input
+                        type="text"
+                        id="studentSearch"
+                        placeholder="Search by name or ID..."
+                    >
+                </div>
+
+                <div class="filter-group">
+                    <label for="subjectFilter">Subject</label>
+
+                    <select id="subjectFilter">
+                        <option value="all">All Subjects</option>
+                        <option value="Maths">Maths</option>
+                        <option value="English">English</option>
+                        <option value="Swahili">Swahili</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="Biology">Biology</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Geography">Geography</option>
+                        <option value="HomeScience">HomeScience</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="genderFilter">Gender</label>
+
+                    <select id="genderFilter">
+                        <option value="all">All Genders</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="gradeFilter">Grade</label>
+
+                    <select id="gradeFilter">
+                        <option value="all">All Grades</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                    </select>
+                </div>
+
+                <div class="filter-group reset-group">
+                    <button
+                        type="button"
+                        id="resetFiltersBtn"
+                        class="btn btn-secondary"
+                    >
+                        Reset Filters
+                    </button>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- STUDENT RESULTS TABLE -->
+        <section class="student-table-section">
+
+            <div class="table-header">
+
+                <div>
+                    <h2>Student Results</h2>
+                    <p>Academic results and calculated grades.</p>
+                </div>
+
+                <div>
+                    <span id="studentCount">0 students</span>
+                </div>
+
+            </div>
+
+            <div class="table-container">
+
+                <table id="studentTable">
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Student Name</th>
+                            <th>Gender</th>
+                            <th>Maths</th>
+                            <th>English</th>
+                            <th>Swahili</th>
+                            <th>Chemistry</th>
+                            <th>Biology</th>
+                            <th>Physics</th>
+                            <th>Geography</th>
+                            <th>HomeScience</th>
+                            <th>Average</th>
+                            <th>Grade</th>
+                            <th>Performance</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="studentTableBody">
+                        <tr>
+                            <td colspan="14" class="empty-table">
+                                No student data available.
+                                <br>
+                                Upload a CSV or XLSX file to begin analysis.
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- PERFORMANCE ANALYSIS -->
+        <section class="analysis-section" id="performance">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Performance Analysis</h2>
+                    <p>
+                        Explore subject averages, student performance,
+                        grade distribution and score patterns.
+                    </p>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+
+                <!-- CHART 1: SUBJECT AVERAGES -->
+                <div class="chart-card">
+
+                    <div class="chart-header">
+                        <h3>Average Subject Scores</h3>
+                        <p>
+                            Compare average performance across all eight subjects.
+                        </p>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="subjectPerformanceChart"></canvas>
+                    </div>
+
+                </div>
+
+
+                <!-- CHART 2: SUBJECT PERFORMANCE PROFILE -->
+                <div class="chart-card">
+
+                    <div class="chart-header">
+                        <h3>Subject Performance Profile</h3>
+                        <p>
+                            Explore how average scores vary between subjects.
+                        </p>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="subjectProfileChart"></canvas>
+                    </div>
+
+                </div>
+
+
+                <!-- CHART 3: GENDER PERFORMANCE -->
+                <div class="chart-card">
+
+                    <div class="chart-header">
+                        <h3>Performance by Gender</h3>
+                        <p>
+                            Compare average scores for male and female students.
+                        </p>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="genderPerformanceChart"></canvas>
+                    </div>
+
+                </div>
+
+
+                <!-- CHART 4: GRADE DISTRIBUTION -->
+                <div class="chart-card">
+
+                    <div class="chart-header">
+                        <h3>Grade Distribution</h3>
+                        <p>
+                            View the number of students in each grade category.
+                        </p>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="gradeDistributionChart"></canvas>
+                    </div>
+
+                </div>
+
+
+                <!-- CHART 5: SCORE DISTRIBUTION -->
+                <div class="chart-card chart-card-wide">
+
+                    <div class="chart-header">
+                        <h3>Score Distribution</h3>
+                        <p>
+                            Understand how student average scores
+                            are distributed across score ranges.
+                        </p>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="scoreDistributionChart"></canvas>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- REPORTS -->
+        <section class="reports-section" id="reports">
+
+            <div class="section-heading">
+                <div>
+                    <h2>Reports & Export</h2>
+                    <p>
+                        Generate and export student performance reports.
+                    </p>
+                </div>
+            </div>
+
+            <div class="report-actions">
+
+                <button
+                    type="button"
+                    id="exportCSVBtn"
+                    class="btn btn-primary"
+                >
+                    Export CSV
+                </button>
+
+                <button
+                    type="button"
+                    id="exportExcelBtn"
+                    class="btn btn-primary"
+                >
+                    Export Excel
+                </button>
+
+                <button
+                    type="button"
+                    id="exportPDFBtn"
+                    class="btn btn-secondary"
+                >
+                    Export PDF Report
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- FOOTER -->
+        <footer class="footer">
+
+            <p>EduAnalytics — Student Performance Analysis System</p>
+
+            <p>Built with HTML, CSS and JavaScript</p>
+
+        </footer>
+
+    </main>
+
+
+    <!-- LIBRARIES -->
+    <script src="libraries/chart.min.js"></script>
+    <script src="libraries/xlsx.full.min.js"></script>
+
+
+    <!-- JAVASCRIPT MODULES -->
+    <script src="js/grading.js"></script>
+    <script src="js/statistics.js"></script>
+    <script src="js/table.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/filter.js"></script>
+    <script src="js/filereader.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/export.js"></script>
+    <script src="js/app.js"></script>
+
+</body>
+</html>
